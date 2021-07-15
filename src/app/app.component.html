@@ -1,9 +1,9 @@
 <div class="wrapper">
-  <div class="example" [style.background]="color">
-    <span [style.color]="'#' + textColor">Text</span>
+  <div class="example" [style.background]="backgroundColor">
+    <span [style.color]="textColor">Text</span>
   </div>
 
-  <input [(colorPicker)]="color" (colorPickerChange)="test()" value="Click me">
+  <input [(colorPicker)]="backgroundColor" (colorPickerChange)="setContrastTextColor($event)" value="Click me">
 
   <input type="text" [(ngModel)]="borderValue">
 </div>

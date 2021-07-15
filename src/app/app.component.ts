@@ -1,30 +1,38 @@
 import { Component } from '@angular/core';
 
+enum TextColor {
+  LIGHT = '#ffffff',
+  DARK = '#3A3A3A'
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent {
-  title = 'color-detect';
-  public color: string;
-  public textColor = '000000';
-  public borderValue = 40;
+  public textColor = TextColor.DARK;
+  public backgroundColor = TextColor.LIGHT;
+  public borderValue = 90;
 
-  public test(): void {
-    const c = this.color.substring(1);
-    const rgb = parseInt(c, 16);
-    const r = (rgb >> 16) & 0xff;
-    const g = (rgb >> 8) & 0xff;
-    const b = (rgb >> 0) & 0xff;
+  constructor() { }
 
-    const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    console.log(luma);
-
-    if (luma < this.borderValue) {
-      this.textColor = 'ffffff';
-    } else {
-      this.textColor = '3A3A3A';
-    }
+  public setContrastTextColor(color: string): void {
+    this.textColor = this.getContrastColor(color);
   }
+
+  private getContrastColor(color: string): TextColor {
+    const c = color.substring(1);
+    const r = parseInt(c.substr(0, 2), 16);
+    const g = parseInt(c.substr(2, 2), 16);
+    const b = parseInt(c.substr(4, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+    if (yiq >= this.borderValue) {
+      return TextColor.DARK;
+    }
+    return TextColor.LIGHT;
+  }
+
 }
